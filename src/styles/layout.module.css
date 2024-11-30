@@ -1,0 +1,51 @@
+.topbar {
+  height: 60px;
+  width: calc(100% - 250px); /* Subtract the width of the sidebar */
+  position: fixed;
+  top: 0;
+  left: 250px; /* Align with the right edge of the sidebar */
+  background-color: #34495e;
+  color: #ecf0f1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensures top bar is above other content */
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.profile span {
+  font-size: 16px;
+}
+
+.loginLayout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.loginLayout form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
