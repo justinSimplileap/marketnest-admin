@@ -12,6 +12,8 @@ import Link from 'next/link';
 import InputGroup from '~/components/InputGroup';
 import SelectGroupOne from '~/components/SelectOption/SelectGroupOne';
 import { CldUploadWidget } from 'next-cloudinary';
+import { Product } from '~/types/product';
+import Image from 'next/image';
 
 interface Category {
   id: number;
@@ -23,17 +25,6 @@ interface Brand {
   name: string;
 }
 
-interface Product {
-  id?: number;
-  name: string;
-  price: number;
-  description: string;
-  quantity: number;
-  images: any[];
-  categoryId: any;
-  brandId: any;
-}
-
 const ProductForm = () => {
   const [product, setProduct] = useState<Product>({
     name: '',
@@ -43,6 +34,7 @@ const ProductForm = () => {
     images: [],
     categoryId: null,
     brandId: null,
+    variants: [],
   });
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -50,13 +42,11 @@ const ProductForm = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  console.log('categories', categories);
-  console.log('brands', brands);
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response: any = await getCategories();
+        console.log('ewrtet', response);
         if (response.status === 'success') {
           setCategories(response?.data);
         } else {
@@ -85,6 +75,7 @@ const ProductForm = () => {
       const fetchProduct = async () => {
         try {
           const data = await getProductById(Number(id));
+          console.log('getProductById', data);
           setProduct(data);
         } catch (error) {
           toast.error('Failed to fetch product');
@@ -106,7 +97,7 @@ const ProductForm = () => {
     };
     setProduct((prev) => ({
       ...prev,
-      images: [...(prev.images || []), newImage],
+      images: [...(prev.images ?? []), newImage],
     }));
   };
 
@@ -117,9 +108,30 @@ const ProductForm = () => {
     }));
   };
 
+  const handleVariantChange = (index: number, field: string, value: any) => {
+    const updatedVariants = [...product.variants];
+    updatedVariants[index] = { ...updatedVariants[index], [field]: value };
+    setProduct((prev) => ({ ...prev, variants: updatedVariants }));
+  };
+
+  const handleAddVariant = () => {
+    setProduct((prev) => ({
+      ...prev,
+      variants: Array.isArray(prev.variants)
+        ? [...prev.variants, { quantity: 0 }]
+        : [{ quantity: 0 }],
+    }));
+  };
+
+  const handleRemoveVariant = (index: number) => {
+    setProduct((prev) => ({
+      ...prev,
+      variants: prev.variants.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('product', product);
     try {
       if (isEditing) {
         await updateProduct(Number(id), product);
@@ -161,7 +173,7 @@ const ProductForm = () => {
           <InputGroup
             label="Product Name"
             type="text"
-            value={product.name}
+            value={product?.name ?? '--'}
             placeholder="Please Enter Product Name"
             onChange={(e) => setProduct({ ...product, name: e.target.value })}
             customClasses="w-full"
@@ -170,7 +182,7 @@ const ProductForm = () => {
           <InputGroup
             label="Price"
             type="number"
-            value={product.price}
+            value={product?.price ?? '--'}
             onChange={(e) =>
               setProduct({ ...product, price: Number(e.target.value) })
             }
@@ -184,7 +196,7 @@ const ProductForm = () => {
             Description
           </label>
           <textarea
-            value={product.description}
+            value={product?.description ?? '--'}
             onChange={(e) =>
               setProduct({ ...product, description: e.target.value })
             }
@@ -196,7 +208,7 @@ const ProductForm = () => {
           <InputGroup
             label="Quantity"
             type="number"
-            value={product.quantity}
+            value={product?.quantity ?? '--'}
             onChange={(e) =>
               setProduct({ ...product, quantity: Number(e.target.value) })
             }
@@ -206,7 +218,7 @@ const ProductForm = () => {
 
           <SelectGroupOne
             label="Category"
-            value={product.categoryId || ''} // default to empty string if null
+            value={product?.categoryId ?? ''}
             onChange={(e) =>
               setProduct({ ...product, categoryId: Number(e.target.value) })
             }
@@ -217,7 +229,7 @@ const ProductForm = () => {
 
           <SelectGroupOne
             label="Brand"
-            value={product.brandId || ''} // default to empty string if null
+            value={product?.brandId ?? ''}
             onChange={(e) =>
               setProduct({ ...product, brandId: Number(e.target.value) })
             }
@@ -251,17 +263,20 @@ const ProductForm = () => {
             )}
           </CldUploadWidget>
 
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 flex flex-wrap gap-4  ">
             {product?.images?.map((image, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between border p-2 rounded"
-              >
-                <span className="truncate">{image?.imageUrl}</span>
+              <div key={index} className="rounded  h-36">
+                <Image
+                  width={100}
+                  height={100}
+                  objectFit="contain"
+                  src={image?.imageUrl}
+                  alt="Images"
+                />
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(index)}
-                  className="text-red-500 dark:text-red-400"
+                  className="text-red-500 dark:text-red-400 my-4"
                 >
                   Remove
                 </button>
@@ -270,9 +285,111 @@ const ProductForm = () => {
           </div>
         </div>
 
+        {/* Product Variants Section */}
+        <div className="mt-8">
+          <h3 className="font-semibold text-lg">Product Variants</h3>
+          {product?.variants?.map((variant, index) => (
+            <div key={index} className="space-y-4 mb-4">
+              <div className="grid grid-cols-3 gap-4">
+                <InputGroup
+                  label="Color"
+                  type="text"
+                  value={variant?.color ?? ''}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'color', e.target.value)
+                  }
+                  placeholder="Enter color"
+                  customClasses="w-full"
+                />
+
+                <InputGroup
+                  label="Size"
+                  type="text"
+                  value={variant?.size ?? ''}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'size', e.target.value)
+                  }
+                  placeholder="Enter size"
+                  customClasses="w-full"
+                />
+                <InputGroup
+                  label="Storage"
+                  type="text"
+                  value={variant?.storage ?? ''}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'storage', e.target.value)
+                  }
+                  placeholder="Enter storage"
+                  customClasses="w-full"
+                />
+
+                <InputGroup
+                  label="SKU"
+                  type="text"
+                  value={variant?.sku ?? ''}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'sku', e.target.value)
+                  }
+                  placeholder="Enter SKU"
+                  customClasses="w-full"
+                />
+
+                <InputGroup
+                  label="Variant Price"
+                  type="number"
+                  value={variant?.variantPrice ?? ''}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'variantPrice', e.target.value)
+                  }
+                  placeholder="Enter variant price"
+                  customClasses="w-full"
+                />
+
+                <InputGroup
+                  label="Discount Price"
+                  type="number"
+                  value={variant?.discountPrice ?? ''}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'discountPrice', e.target.value)
+                  }
+                  placeholder="Enter discount price"
+                  customClasses="w-full"
+                />
+
+                <InputGroup
+                  label="Quantity"
+                  type="number"
+                  value={variant?.quantity}
+                  onChange={(e) =>
+                    handleVariantChange(index, 'quantity', e.target.value)
+                  }
+                  placeholder="Enter variant quantity"
+                  customClasses="w-full"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleRemoveVariant(index)}
+                className="text-red-500 dark:text-red-400"
+              >
+                Remove Variant
+              </button>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={handleAddVariant}
+            className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+          >
+            Add Variant
+          </button>
+        </div>
+
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+          className="bg-green-500 text-white py-2 px-4 rounded mt-4"
         >
           {isEditing ? 'Update Product' : 'Add Product'}
         </button>

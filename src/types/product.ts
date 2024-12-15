@@ -1,8 +1,24 @@
+interface ProductVariant {
+  color?: string;
+  ramSize?: string;
+  size?: string;
+  storage?: string;
+  sku?: string;
+  barcode?: string;
+  variantPrice?: number;
+  discountPrice?: number;
+  quantity?: number;
+  isFeatured?: boolean;
+  imageUrl?: string;
+}
 export type Product = {
-  image: string;
+  id?: number;
   name: string;
-  category: string;
   price: number;
-  sold: number;
-  profit: number;
+  description: string;
+  quantity: number;
+  images: any[];
+  categoryId: any;
+  brandId: any;
+  variants: ProductVariant[];
 };

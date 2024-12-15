@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -7,15 +8,12 @@ import {
   FaBox,
   FaTags,
   FaShoppingCart,
-  FaClipboardList,
   FaChartBar,
   FaBullhorn,
-  FaFileAlt,
-  FaStar,
   FaCog,
-  FaClipboardCheck,
   FaSignOutAlt,
 } from 'react-icons/fa';
+import Logo from '~/assets/logo/venom-wolf-logo1.png';
 
 import { useSidebar } from '~/context/SidebarContext';
 import LocalStorageService from '~/services/LocalStorageService';
@@ -107,13 +105,13 @@ const Sidebar = () => {
         <div
           className={`text-2xl h-14 font-bold ${isSidebarOpen ? 'block' : 'hidden'}`}
         >
-          MyApp
+          <Image className="h-18 w-auto mx-auto" src={Logo} alt="Venom wolf" />
         </div>
-        <nav className="mt-6 flex flex-col gap-6 ">
+        <nav className="mt-12 flex flex-col gap-6 ">
           {sidebarItems.map(({ route, icon, label }) => (
             <Link key={route} href={route} passHref>
               <div
-                className={`flex items-center cursor-pointer gap-4 hover:bg-gray-700 ${
+                className={`flex items-center cursor-pointer gap-4  ${
                   isSidebarOpen ? 'justify-start' : 'justify-center'
                 }`}
               >
@@ -124,7 +122,7 @@ const Sidebar = () => {
 
           <div
             onClick={handleLogout}
-            className={`flex items-center cursor-pointer gap-4 hover:bg-gray-700 ${
+            className={`flex items-center cursor-pointer gap-4  ${
               isSidebarOpen ? 'justify-start' : 'justify-center'
             }`}
           >

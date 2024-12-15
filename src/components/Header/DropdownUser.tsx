@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ClickOutside from '../ClickOutside';
-import Profile from '../../../public/images/user/user-03.png';
+import Profile from '../../../public/images/user/user-00.png';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -59,7 +59,7 @@ const DropdownUser = () => {
               <Image
                 width={112}
                 height={112}
-                src="/images/user/user-03.png"
+                src="/images/user/user-00.png"
                 style={{
                   width: 'auto',
                   height: 'auto',

@@ -4,7 +4,7 @@ import LoginLayout from '~/components/layout/LoginLayout';
 import { useState } from 'react';
 import { login } from '~/services/api/auth';
 import LocalStorageService from '~/services/LocalStorageService';
-import Logo from '~/assets/logo/jpmarket.png';
+import Logo from '~/assets/logo/venom-wolf-logo1.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import Banner from '../../../public/images/grids/grid-01.svg';
@@ -48,8 +48,8 @@ const AdminLogin = () => {
 
   return (
     <LoginLayout>
-      <div className="">
-        <div className=" bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
+      <div className=" flex h-screen">
+        <div className=" m-auto h-[80%] w-[80%] rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
           <div className="flex flex-wrap items-center">
             <div className="w-full xl:w-1/2">
               <div className="w-full p-4 sm:p-12.5 xl:p-15">
@@ -163,9 +163,9 @@ const AdminLogin = () => {
               </div>
             </div>
 
-            <div className="hidden w-full p-7.5 xl:block xl:w-1/2">
-              <div className="custom-gradient-1 overflow-hidden rounded-2xl px-12.5 pt-12.5 dark:!bg-dark-2 dark:bg-none">
-                <Link className="mb-5 inline-block" href="/">
+            <div className="hidden w-full p-7 xl:block xl:w-1/2">
+              <div className="custom-gradient-1 overflow-hidden rounded-2xl px-12 pt-8 dark:!bg-dark-2 dark:bg-none">
+                <Link className="mb-2 inline-block" href="/">
                   <Image
                     className="hidden dark:block"
                     src={Logo}
@@ -174,18 +174,18 @@ const AdminLogin = () => {
                     height={32}
                   />
                   <Image
-                    className="dark:hidden"
+                    className="h-14 w-auto dark:hidden"
                     src={Logo}
                     alt="Logo"
                     width={106}
                     height={32}
                   />
                 </Link>
-                <p className="mb-3 text-xl font-medium text-dark dark:text-white">
+                <p className="mb-2 text-xl font-medium text-dark dark:text-white">
                   Sign in to your account
                 </p>
 
-                <h1 className="mb-3 text-2xl font-bold text-dark dark:text-white sm:text-heading-3">
+                <h1 className="mb-2 text-2xl font-bold text-dark dark:text-white sm:text-heading-3">
                   Welcome Back!
                 </h1>
 
@@ -194,13 +194,13 @@ const AdminLogin = () => {
                   fields below
                 </p>
 
-                <div className="mt-4">
+                <div className="">
                   <Image
                     src={Banner}
                     alt="Logo"
-                    width={405}
-                    height={325}
-                    className="mx-auto dark:opacity-30"
+                    width={300}
+                    height={200}
+                    className="mx-auto  object-contain dark:opacity-30"
                   />
                 </div>
               </div>

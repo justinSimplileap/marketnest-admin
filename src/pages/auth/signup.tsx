@@ -4,7 +4,7 @@ import LoginLayout from '~/components/layout/LoginLayout';
 import { useState } from 'react';
 import { signup } from '~/services/api/auth';
 import LocalStorageService from '~/services/LocalStorageService';
-import Logo from '~/assets/logo/jpmarket.png';
+import Logo from '~/assets/logo/venom-wolf-logo1.png';
 import Image from 'next/image';
 import Link from 'next/link';
 

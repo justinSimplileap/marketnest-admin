@@ -1,6 +1,6 @@
+import { Product } from '~/types/product';
 import ProtectedAxiosInstance from '../ProtectedAxiosInstance';
 
-// Define interfaces for categories and brands
 interface Category {
   id: number;
   name: string;
@@ -11,18 +11,6 @@ interface Brand {
   name: string;
 }
 
-// Define the product data structure
-interface Product {
-  id?: number;
-  name: string;
-  price: number;
-  description: string;
-  quantity: number;
-  images: string[];
-  categoryId: number;
-  brandId: number;
-}
-
 // Add a new product
 export const addProduct = async (data: Product) => {
   try {
@@ -30,6 +18,16 @@ export const addProduct = async (data: Product) => {
     return response.data;
   } catch (error) {
     console.error('Error adding product:', error);
+    throw error;
+  }
+};
+// Update a product
+export const updateProduct = async (id: number, data: Product) => {
+  try {
+    const response = await ProtectedAxiosInstance.put(`/product/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating product:', error);
     throw error;
   }
 };
@@ -49,20 +47,10 @@ export const getAllProducts = async (): Promise<any> => {
 export const getProductById = async (id: number): Promise<Product> => {
   try {
     const response = await ProtectedAxiosInstance.get(`/product/${id}`);
-    return response.data.product;
+    console.log('response from api', response.data.data);
+    return response.data.data;
   } catch (error) {
     console.error('Error fetching product:', error);
-    throw error;
-  }
-};
-
-// Update a product
-export const updateProduct = async (id: number, data: Product) => {
-  try {
-    const response = await ProtectedAxiosInstance.put(`/product/${id}`, data);
-    return response.data;
-  } catch (error) {
-    console.error('Error updating product:', error);
     throw error;
   }
 };
